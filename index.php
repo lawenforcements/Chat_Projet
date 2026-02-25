@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background-color: white;
             min-height: 100vh;
         }
         
@@ -27,7 +27,7 @@
         }
         
         .chat-header {
-            background: linear-gradient(to right, #3498db, #2c3e50);
+            background-color: black;
             color: white;
             padding: 20px;
             text-align: center;
