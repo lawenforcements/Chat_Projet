@@ -15,8 +15,15 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
     $imagePath = $targetFile;
 }
 
-// Stocker le message
+// Stocker le message avec le bon format (pseudo|type|contenu)
 $file = fopen("messages.txt", "a");
-fwrite($file, $pseudo . "|" . $message . "|" . $imagePath . "\n");
+
+if ($imagePath) {
+    // Si c'est une image
+    fwrite($file, $pseudo . "|[image]|" . $imagePath . "\n");
+} else {
+    // Si c'est un message texte
+    fwrite($file, $pseudo . "|[text]|" . $message . "\n");
+}
 fclose($file);
 ?>

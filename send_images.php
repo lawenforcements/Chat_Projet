@@ -14,7 +14,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
     if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
         $imagePath = $targetFile;
 
-        // Sauvegarde dans messages.txt pour persistance
+        // Sauvegarde dans messages.txt pour persistance avec le bon format
         $file = fopen("messages.txt", "a");
         fwrite($file, $pseudo . "|[image]|" . $imagePath . "\n");
         fclose($file);
