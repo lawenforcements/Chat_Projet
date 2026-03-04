@@ -1,27 +1,27 @@
 <?php
-if (file_exists("messages.txt")) {
-    $lines = file("messages.txt", FILE_IGNORE_NEW_LINES);
+// Connect to database
+$pdo = new PDO(
+    "mysql:host=127.0.0.1;dbname=anarchy;charset=utf8",
+    "root",
+    ""
+);
 
-    foreach ($lines as $line) {
-        // Split the line by | delimiter
-        $parts = explode("|", $line, 3); // Limit to 3 parts to handle messages with | inside
-        
-        if (count($parts) >= 3) {
-            $pseudo = $parts[0];
-            $type = $parts[1];
-            $content = $parts[2];
+$stmt = $pdo->query("SELECT * FROM messages ORDER BY created_at ASC");
 
-            echo "<div class='message'>";
-            echo "<span class='pseudo'>" . htmlspecialchars($pseudo) . ":</span> ";
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $pseudo = htmlspecialchars($row['username']);
+    $type   = $row['type'];
+    $content = htmlspecialchars($row['content']);
 
-            if ($type === "[image]") {
-                echo "<br><img src='" . htmlspecialchars($content) . "' class='message-image' alt='Image partagée'>";
-            } else {
-                echo htmlspecialchars($content);
-            }
+    echo "<div class='message'>";
+    echo "<span class='pseudo'>{$pseudo}:</span> ";
 
-            echo "</div>";
-        }
+    if ($type === "image") {
+        echo "<br><img src='{$content}' class='message-image' alt='Image partagée'>";
+    } else {
+        echo $content;
     }
+
+    echo "</div>";
 }
 ?>

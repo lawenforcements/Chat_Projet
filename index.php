@@ -313,8 +313,6 @@
                 
                 // Refresh messages every 2 seconds
                 setInterval(loadMessages, 2000);
-            } else {
-                alert('Veuillez entrer un pseudo valide');
             }
         }
         
@@ -376,7 +374,7 @@
             formData.append('pseudo', pseudo);
             formData.append('image', file);
             
-            fetch('send_images.php', {
+            fetch('send_messages.php', {
                 method: 'POST',
                 body: formData
             })
@@ -388,10 +386,7 @@
                     alert("Erreur lors de l'envoi de l'image !");
                 }
             })
-            .catch(error => {
-                console.error('Error uploading image:', error);
-                alert("Erreur lors de l'envoi de l'image !");
-            });
+            
             
             event.target.value = ""; // Reset the file input
         }

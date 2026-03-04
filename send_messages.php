@@ -1,9 +1,19 @@
 <?php
+// Database connection
+$pdo = new PDO(
+    "mysql:host=127.0.0.1;dbname=anarchy;charset=utf8",
+    "root",
+    ""
+);
+
+// Sanitize input
 $pseudo = htmlspecialchars($_POST['pseudo']);
 $message = htmlspecialchars($_POST['message']);
 
-// Vérifier si un fichier image est envoyé
+// Default = no image
 $imagePath = "";
+
+// If an image is uploaded
 if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
     $targetDir = "uploads/";
     if (!is_dir($targetDir)) mkdir($targetDir, 0777, true);
@@ -15,15 +25,16 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
     $imagePath = $targetFile;
 }
 
-// Stocker le message avec le bon format (pseudo|type|contenu)
-$file = fopen("messages.txt", "a");
-
+// Insert into database
 if ($imagePath) {
-    // Si c'est une image
-    fwrite($file, $pseudo . "|[image]|" . $imagePath . "\n");
+    // Image message
+    $stmt = $pdo->prepare("INSERT INTO messages (username, type, content) VALUES (?, 'image', ?)");
+    $stmt->execute([$pseudo, $imagePath]);
 } else {
-    // Si c'est un message texte
-    fwrite($file, $pseudo . "|[text]|" . $message . "\n");
+    // Text message
+    $stmt = $pdo->prepare("INSERT INTO messages(username,type,content,created_at) values (?, 'text', ?,now())");
+    $stmt->execute([$pseudo, $message]);
 }
-fclose($file);
+
+echo "OK";
 ?>
